@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="fixed-center w-100 px-4 px-md-0" style="max-width: 500px">
+        <div class="card bg-light w-100 w-md-auto">
+            <form class="row no-gutters text-center py-4 gy-4" method="POST">
+                {% csrf_token %}
+                <h1>Registrar</h1>
+                {% for fm in form %}
+                    <div class="col-12">
+                        <label class="w-100">{{fm.label}}</label>
+                        {{fm}}
+                    </div>
+                {% endfor %}
+                <div class="col-12">
+                    <input type="submit" vlaue="Registrar"/>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock  %}
