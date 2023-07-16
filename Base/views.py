@@ -1,6 +1,6 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
-from .forms import UserCreateForm, UserLoginForm
+from .forms import UserCreateForm, UserLoginForm, ListCreationForm
 from .models import List, Task, User
 
 def login(request: HttpRequest) -> HttpResponse:
@@ -12,7 +12,6 @@ def login(request: HttpRequest) -> HttpResponse:
         
         if request.method == "POST":
             form = UserLoginForm(request.POST)
-            print(form)
             if form.is_valid():
                 user = form.check()
                 if user:
@@ -45,18 +44,39 @@ def registrar(request: HttpRequest) -> HttpResponse:
 
 def home(request: HttpRequest) -> HttpResponse:
     usuario_creado = request.session.get('usuario_creado')
-    print("home")
     if usuario_creado:
         lists = False
         id_user = User.objects.filter(mail=usuario_creado['correo'])
         
-        if id_user.exists:
+        if id_user.exists():
             id_user = id_user[0].id
-            lists = List.objects.filter(id_user=id_user)
-            if lists.exists():
-                lists = lists[0]
-
+            
+            lists = list(List.objects.filter(id_user=id_user))
+        print(lists)
         return render(request, "home.html", {'usuario': usuario_creado, 'listas': lists})
     else:
         return redirect(login)
+    
+def listaCrear(request: HttpRequest) -> HttpResponse:
+    usuario_creado = request.session.get('usuario_creado')
+    user = User.objects.filter(mail=usuario_creado['correo'])
+    if user.exists():
+        user = user[0]
+        err = False
+        if request.method == "POST":
+            form = ListCreationForm(request.POST, user=user)
+            if form.is_valid():
+                form.create_list()
+                return redirect(home)
+            else:
+                err = "Los campos no son validos"
+        else:
+            form = ListCreationForm(user=user)
+
+        return render(request, "creacionLista.html", {"form": form, "error": err})
+    else:
+        if usuario_creado:
+            del request.session['usuario_creado']
+            request.session.modified = True
+        render(login)     
     

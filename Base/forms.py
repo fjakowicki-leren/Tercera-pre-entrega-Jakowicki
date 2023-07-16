@@ -29,10 +29,20 @@ class UserLoginForm(forms.Form):
         self.fields['mail'].label = "Email"
         self.fields['password'].label = "Contraseña"
 
-class ListForm(forms.ModelForm):
-    class Meta: 
-        model = List
-        fields = ["title", "description"]
+class ListCreationForm(forms.Form):
+    title = forms.CharField(max_length=50)
+    description = forms.CharField(max_length=50)
+    id_user = 0
+
+    def create_list(self):
+        cleaned_data = super().clean()
+        list = List(id_user=self.id_user, description=cleaned_data.get("description"), title=cleaned_data.get("title"))
+        list.save()
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        super(ListCreationForm, self).__init__(*args, **kwargs)
+        self.id_user = user
 
 class TaskForm(forms.ModelForm):
     class Meta: 
