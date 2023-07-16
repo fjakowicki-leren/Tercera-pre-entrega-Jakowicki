@@ -1,8 +1,8 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h1>Login</h1>
-    <form class="row no-gutters gy-4" method="POST">
+    <h1>Crear lista</h1>
+    <form class="row no-gutters text-center gy-4" method="POST">
         {% csrf_token %}
         {% for fm in form %}
             <div class="col-12">
@@ -11,11 +11,8 @@
             </div>
         {% endfor %}
         <div class="col-12">
-            {% if error %}
-                <p class="text-danger">{{ error }}</p>
-            {% endif %}
-            <input type="submit" value="Ingresar"/>
+            <input type="submit" vlaue="Registrar"/>
         </div>
     </form>
-    <a class="mt-4" href="/registrar">Registrar</a>
+    <a class="mt-4" href="/login">Volver al login</a>
 {% endblock  %}

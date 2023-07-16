@@ -10,18 +10,20 @@
     <title>Document</title>
 </head>
 <body class="bg-secondary">
-    <header class="layout-header">
+    <header>
     </header>
     
     <div class="row layout-title">
         {% block title %}{% endblock %}
     </div>
-    
-    <div class="layout-content">
-        {% block content %}{% endblock %}
+
+    <div class="fixed-center w-100 px-4 px-md-0" style="max-width: 500px">
+        <div class="card bg-light w-100 w-md-auto text-center py-4">
+            {% block content %}{% endblock %}
+        </div>
     </div>
 
-    <footer class="layout-footer">
+    <footer>
     </footer>
 </body>
 </html>

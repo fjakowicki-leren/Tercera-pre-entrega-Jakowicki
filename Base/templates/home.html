@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <h1>Bienvenido {{ usuario.nombre }}</h1>
+    {% if listas %}
+        <table class="text-center">
+            <thead>
+                <tr>
+                    <th>Titulo</th>
+                    <th>Descripcion</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lista in listas %}
+                    <tr>
+                        <td>{{ lista.title }}</td>
+                        <td>{{ lista.title.description }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock  %}
