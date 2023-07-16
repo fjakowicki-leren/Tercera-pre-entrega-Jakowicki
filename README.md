@@ -5,5 +5,3 @@
 Crear un entorno virtual y installar django
 
 Ejecutar el archivo manage.py
-
-El proyecto posee unicamente la ruta home "/"
