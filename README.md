@@ -4,4 +4,6 @@
 
 Crear un entorno virtual y installar django
 
-Ejecutar el archivo manage.py
+Correr las migratios
+python manage.py makemigrations
+python manage.py migrate
