@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <a href="/">Velver a la home</a>
+    <h1>{{ list.title }}</h1>
+    <p>{{ list.description }}</p>
+
+    <h2>Crear tarea</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="row m-0" style="align-items: center;">
+            {% for fm in form %}
+                <div class="col-6">
+                    <label class="w-100">{{ fm.label }}</label>
+                    {{ fm }}
+                </diV>
+            {% endfor %}
+            <div class="col-6">
+                <input type="submit" value="Crear tarea">
+            </diV>
+        </div>
+    </form>
+    <h2 class="mt-5">Tareas</h2>
+    <table class="text-center">
+        <thead>
+            <tr>
+                <th>Titulo</th>
+                <th>Descripcion</th>
+                <th>Fecha de expiración</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.description }}</td>
+                    <td>{{ task.exp_date }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock  %}

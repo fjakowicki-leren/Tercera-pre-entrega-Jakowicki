@@ -4,10 +4,11 @@
     <h1>Bienvenido {{ usuario.nombre }}</h1>
     <a href="lista/crear">Crear lista</a>
     {% if listas %}
-        <table class="text-center">
+        <table class="text-center mt-4">
             <thead>
                 <tr>
                     <th>Titulo</th>
+                    <th>Descripcion</th>
                     <th>Descripcion</th>
                 </tr>
             </thead>
@@ -16,6 +17,9 @@
                     <tr>
                         <td>{{ lista.title }}</td>
                         <td>{{ lista.description }}</td>
+                        <td>
+                            <a href="/lista/{{lista.id}}">Ver lista</a>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

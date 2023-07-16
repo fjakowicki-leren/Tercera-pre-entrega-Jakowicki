@@ -36,16 +36,30 @@ class ListCreationForm(forms.Form):
 
     def create_list(self):
         cleaned_data = super().clean()
-        list = List(id_user=self.id_user, description=cleaned_data.get("description"), title=cleaned_data.get("title"))
-        list.save()
+        taskList = List(id_user=self.id_user, description=cleaned_data.get("description"), title=cleaned_data.get("title"))
+        taskList.save()
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
         super(ListCreationForm, self).__init__(*args, **kwargs)
         self.id_user = user
 
-class TaskForm(forms.ModelForm):
-    class Meta: 
-        model = Task
-        fields = ["title", "description", "exp_date", "id_lista"]
+class TaskCreateForm(forms.Form):
+    title = forms.CharField(max_length=50)
+    description = forms.CharField(widget=forms.Textarea(attrs={"maxlength":"500", "cols":False, "rows":"5"}))
+    exp_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    id_lista = 0
+
+    def create_task(self):
+        cleaned_data = super().clean()
+        task = Task(id_lista=self.id_lista, title=cleaned_data.get("title"), description=cleaned_data.get("description"), exp_date=cleaned_data.get("exp_date"))
+        task.save()
+    
+    def __init__(self, *args, **kwargs):
+        taskList = kwargs.pop('taskList')
+        super(TaskCreateForm, self).__init__(*args, **kwargs)
+        self.fields['title'].label = "Titulo"
+        self.fields['description'].label = "Descripción"
+        self.fields['exp_date'].label = "Fecha de expiracion"
+        self.id_lista = taskList
     

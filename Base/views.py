@@ -1,6 +1,6 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
-from .forms import UserCreateForm, UserLoginForm, ListCreationForm
+from .forms import UserCreateForm, UserLoginForm, ListCreationForm, TaskCreateForm
 from .models import List, Task, User
 
 def login(request: HttpRequest) -> HttpResponse:
@@ -57,12 +57,43 @@ def home(request: HttpRequest) -> HttpResponse:
     else:
         return redirect(login)
     
+def lista(request: HttpRequest, id) -> HttpResponse:
+    usuario_creado = request.session.get('usuario_creado')
+    if usuario_creado:
+        taskList = List.objects.filter(id=id)
+        
+        if taskList.exists():
+            taskList = taskList[0]
+        else:
+            return redirect(home)
+        
+        tasks = list(Task.objects.filter(id_lista=taskList.id))
+
+        err = False
+
+        if request.method == "POST":
+            form = TaskCreateForm(request.POST, taskList=taskList)
+            if form.is_valid():
+                form.create_task()
+                return redirect(lista, id)
+            else:
+                err = "Los campos no son validos"
+        else:
+            form = TaskCreateForm(taskList=taskList)
+
+        return render(request, "lista.html", {"tasks": tasks, "list": taskList, "form": form, "error": err})
+    else:
+        return redirect(login)     
+    
 def listaCrear(request: HttpRequest) -> HttpResponse:
     usuario_creado = request.session.get('usuario_creado')
     user = User.objects.filter(mail=usuario_creado['correo'])
+
     if user.exists():
         user = user[0]
+
         err = False
+
         if request.method == "POST":
             form = ListCreationForm(request.POST, user=user)
             if form.is_valid():
@@ -78,5 +109,5 @@ def listaCrear(request: HttpRequest) -> HttpResponse:
         if usuario_creado:
             del request.session['usuario_creado']
             request.session.modified = True
-        render(login)     
+        return redirect(login)     
     
